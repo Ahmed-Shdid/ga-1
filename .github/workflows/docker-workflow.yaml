@@ -17,7 +17,7 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ vars.DOCKER_USERNAME }}" --password-stdin
 
       - name: Docker Build
-        run: docker  buildx build -t docker.io/${{ vars.DOCKER_USERNAME}}/${{ env.IMAGE_NAME }}:latest .
+        run: docker  buildx build -t docker.io/${{ vars.DOCKER_USERNAME}}/${{env.IMAGE_NAME }}:latest .
 
       - name: Docker Push
         run: docker push docker.io/${{ vars.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}:latest
