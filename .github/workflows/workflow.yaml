@@ -15,7 +15,7 @@ jobs:
 
       - name: Docker Build
         run: |
-          docker build -t docker.io/${{ vars.DOCKER_USERNAME }}/$IMAGE_NAME:latest .
+          docker build -t docker.io/ahmedshdid/$IMAGE_NAME:latest .
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
 
