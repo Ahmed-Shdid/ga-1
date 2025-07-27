@@ -1,11 +1,11 @@
 name: Exploring Variables and Secrets
 
+
 on:
   workflow_dispatch:
 
 env:
-  IMAGE_NAME: github-actions-nginx
-
+    IMAGE_NAME: github-actions-nginx
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -14,24 +14,21 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Docker Build
-        run: |
-          docker build -t docker.io/ahmedshdid/$IMAGE_NAME:latest .
-        env:
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
-
+        
+        run: docker build -t githubactionsiti2025.azurecr.io/githubactionsiti2025/${{ env.IMAGE_NAME }}:latest .
+             
       - name: Docker Login
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username "${{ vars.DOCKER_USERNAME }}" --password-stdin
+        run:  echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ vars.REG_URL }} --username ${{ vars.DOCKER_USERNAME }} --password-stdin 
 
       - name: Docker Publish
-        run: docker push docker.io/${{ vars.DOCKER_USERNAME }}/$IMAGE_NAME:latest
-        env:
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+        run: docker push ${{ vars.REG_URL }}/${{ vars.DOCKER_USERNAME }}/$IMAGE_NAME:latest
 
   deploy:
     needs: docker
     runs-on: ubuntu-latest
     steps:
+      - name: Docker Login
+        run:  echo "${{ secrets.DOCKER_PASSWORD }}" | docker login ${{ vars.REG_URL }} --username ${{ vars.DOCKER_USERNAME }} --password-stdin 
+      
       - name: Docker Run
-        run: docker run -d -p 8080:80 docker.io/${{ vars.DOCKER_USERNAME }}/$IMAGE_NAME:latest
-        env:
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+        run: docker run -d -p 8080:80 ${{ vars.REG_URL }}/${{ vars.DOCKER_USERNAME }}/$IMAGE_NAME:latest
